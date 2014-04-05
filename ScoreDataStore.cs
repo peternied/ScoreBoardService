@@ -47,7 +47,8 @@ namespace ScoreBoardService
 
         private void AddDefaultScores(GameId game)
         {
-            defaultScores.ToList().ForEach(score => {
+            defaultScores.ToList().ForEach(score =>
+            {
                 if (!allGameScores[game].ContainsKey(score.Item1))
                 {
                     allGameScores[game][score.Item1] = score.Item2;
@@ -87,6 +88,12 @@ namespace ScoreBoardService
 
         public IEnumerable<Tuple<string, int>> GetGameScores(GameId gameId)
         {
+            if (!this.allGameScores.ContainsKey(gameId))
+            {
+                this.allGameScores.TryAdd(gameId, new Dictionary<string, int>());
+                this.AddDefaultScores(gameId);
+            }
+            
             Dictionary<string, int> gameScores = null;
             if (!this.allGameScores.TryGetValue(gameId, out gameScores) || gameScores == null)
             {
@@ -111,7 +118,7 @@ namespace ScoreBoardService
                 },
                 (key, dictionary) =>
                 {
-                    dictionary[playerName] = Math.Max(score, dictionary[playerName]);
+                    dictionary[playerName] = Math.Max(score, dictionary.ContainsKey(playerName) ? dictionary[playerName] : 0 );
                     return dictionary;
                 });
             this.AddDefaultScores(gameId);
