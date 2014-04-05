@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScoreBoardService", "ScoreBoardService.csproj", "{E8A6B357-BDA5-41DA-A3F1-D27F034F5DCA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexHero", "..\..\..\GitHub\RegexHero\RegexHero\RegexHero.csproj", "{1CA67C72-D4D6-43B2-B277-4DB2E77CAD2E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexHero", "..\..\..\..\GitHub\RegexHero\RegexHero\RegexHero.csproj", "{1CA67C72-D4D6-43B2-B277-4DB2E77CAD2E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E8A6B357-BDA5-41DA-A3F1-D27F034F5DCA} = {E8A6B357-BDA5-41DA-A3F1-D27F034F5DCA}
 	EndProjectSection

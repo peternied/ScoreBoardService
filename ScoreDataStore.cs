@@ -22,6 +22,18 @@ namespace ScoreBoardService
         private string FileStoreName = Path.Combine(Path.GetTempPath(), "scoredatastore.xml");
         private bool SeralizationEnabled = false;
 
+        private Tuple<string, int>[] defaultScores = new[]
+        {
+            new Tuple<string, int>("Natalie", 700),
+            new Tuple<string, int>("Summer", 500),
+            new Tuple<string, int>("Eric", 600),
+            new Tuple<string, int>("Shelia", 300),
+            new Tuple<string, int>("Daisy", 200),
+            new Tuple<string, int>("Suzy", 1),
+            new Tuple<string, int>("Dhyana", 1000),
+            new Tuple<string, int>("Peter", 1200),
+        };
+
         internal ScoreDataStore()
         {
             InternalLock = new object();
@@ -31,6 +43,16 @@ namespace ScoreBoardService
             {
                 SerializeFromDisk();
             }
+        }
+
+        private void AddDefaultScores(GameId game)
+        {
+            defaultScores.ToList().ForEach(score => {
+                if (!allGameScores[game].ContainsKey(score.Item1))
+                {
+                    allGameScores[game][score.Item1] = score.Item2;
+                }
+            });
         }
 
         private void SerializeFromDisk()
@@ -66,18 +88,14 @@ namespace ScoreBoardService
         public IEnumerable<Tuple<string, int>> GetGameScores(GameId gameId)
         {
             Dictionary<string, int> gameScores = null;
-            if (!this.allGameScores.TryGetValue(gameId, out gameScores))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            if (gameScores == null)
+            if (!this.allGameScores.TryGetValue(gameId, out gameScores) || gameScores == null)
             {
                 return Enumerable.Empty<Tuple<string, int>>();
             }
 
             return gameScores
                 .OrderBy(t => t.Value)
+                .Reverse()
                 .Select(t => new Tuple<string, int>(t.Key, t.Value))                
                 .Take(20);
         }
@@ -96,6 +114,7 @@ namespace ScoreBoardService
                     dictionary[playerName] = Math.Max(score, dictionary[playerName]);
                     return dictionary;
                 });
+            this.AddDefaultScores(gameId);
 
             if (SeralizationEnabled)
             {
